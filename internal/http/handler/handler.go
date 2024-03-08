@@ -21,6 +21,7 @@ type User interface {
 	Register(ctx context.Context, user *entity.RegisterUser) (*uuid.UUID, error)
 	Authenticate(ctx context.Context, userID uuid.UUID, password string) (*entity.User, error)
 	GetUser(ctx context.Context, userID uuid.UUID) (*entity.User, error)
+	Search(ctx context.Context, filter *entity.UserFilter) ([]*entity.User, error)
 }
 
 type Handler struct {
@@ -100,16 +101,16 @@ func (h *Handler) Login(ctx context.Context, request api.LoginRequestObject) (ap
 	if err != nil {
 		validationErr := entity.ValidationError{}
 		if errors.As(err, &validationErr) {
-			return api.Login400Response{}, err
+			return api.Login400Response{}, nil
 		}
 		log.Errorf("failed to authenticate user: %v", err)
-		return api.Login500JSONResponse{}, err
+		return api.Login500JSONResponse{}, nil
 	}
 
 	token, err := h.tokenProvider.GenerateToken(user.ID.String())
 	if err != nil {
 		log.Errorf("failed to generate token: %v", err)
-		return api.Login500JSONResponse{}, err
+		return api.Login500JSONResponse{}, nil
 	}
 
 	return api.Login200JSONResponse{
@@ -127,10 +128,14 @@ func (h *Handler) GetUser(ctx context.Context, request api.GetUserRequestObject)
 	if err != nil {
 		validationErr := entity.ValidationError{}
 		if errors.As(err, &validationErr) {
-			return api.GetUser400Response{}, err
+			return api.GetUser400Response{}, nil
+		}
+		notFoundErr := entity.NotFoundError{}
+		if errors.As(err, &notFoundErr) {
+			return api.GetUser404Response{}, nil
 		}
 		log.Errorf("failed to get user: %v", err)
-		return api.GetUser500JSONResponse{}, err
+		return api.GetUser500JSONResponse{}, nil
 	}
 
 	var birthDate *openapi_types.Date

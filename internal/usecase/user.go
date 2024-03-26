@@ -7,20 +7,30 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/soltanat/otus-highload/internal/entity"
-	"github.com/soltanat/otus-highload/internal/interface/storage"
-	interfaces "github.com/soltanat/otus-highload/internal/interface/usecase"
 )
 
-type User struct {
-	userStorager storage.UserStorager
-	hasher       interfaces.PasswordHasher
+const defaultLimit = 10
+
+type UserStorager interface {
+	Save(ctx context.Context, tx entity.Tx, user *entity.User) error
+	Get(ctx context.Context, tx entity.Tx, userID uuid.UUID) (*entity.User, error)
+	Find(ctx context.Context, tx entity.Tx, filter *entity.UserFilter) ([]*entity.User, error)
 }
 
-func NewUser(userStorager storage.UserStorager, hasher interfaces.PasswordHasher) (*User, error) {
+type PasswordHasher interface {
+	Hash(pwd []byte) ([]byte, error)
+	Compare(hashedPwd []byte, plainPwd []byte) bool
+}
+
+type User struct {
+	userStorager UserStorager
+	hasher       PasswordHasher
+}
+
+func NewUser(userStorager UserStorager, hasher PasswordHasher) (*User, error) {
 	if userStorager == nil {
 		return nil, fmt.Errorf("userStorager is nil")
 	}
-
 	if hasher == nil {
 		return nil, fmt.Errorf("hasher is nil")
 	}
@@ -83,4 +93,24 @@ func (u *User) Authenticate(ctx context.Context, userID uuid.UUID, password stri
 
 func (u *User) GetUser(ctx context.Context, userID uuid.UUID) (*entity.User, error) {
 	return u.userStorager.Get(ctx, nil, userID)
+}
+
+func (u *User) Search(ctx context.Context, filter *entity.UserFilter) ([]*entity.User, error) {
+	if filter == nil {
+		return nil, fmt.Errorf("filter is nil")
+	}
+
+	if filter.FirstName.Like == "" && filter.SecondName.Like == "" {
+		return nil, fmt.Errorf("filter.FirstName and filter.SecondName are nil")
+	}
+
+	if filter.Limit == nil {
+		filter.Limit = intPtr(10)
+	}
+
+	return u.userStorager.Find(ctx, nil, filter)
+}
+
+func intPtr(i int) *int {
+	return &i
 }

@@ -4,3 +4,9 @@ gen:
 
 lint:
 	golangci-lint run --fix
+
+up:
+	docker-compose up -d --build
+
+down:
+	docker-compose down -v

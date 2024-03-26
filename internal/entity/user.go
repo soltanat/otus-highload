@@ -32,3 +32,14 @@ type RegisterUser struct {
 	City       *string
 	Password   string
 }
+
+type Filter struct {
+	Like string
+}
+
+type UserFilter struct {
+	FirstName  Filter
+	SecondName Filter
+	Limit      *int
+	Offset     *int
+}

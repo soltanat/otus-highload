@@ -153,6 +153,40 @@ func (h *Handler) GetUser(ctx context.Context, request api.GetUserRequestObject)
 	}, nil
 }
 
+func (h *Handler) SearchUser(ctx context.Context, request api.SearchUserRequestObject) (api.SearchUserResponseObject, error) {
+	if request.Params.FirstName == "" || request.Params.LastName == "" {
+		return api.SearchUser400Response{}, nil
+	}
+
+	filter := &entity.UserFilter{
+		FirstName:  entity.Filter{Like: request.Params.FirstName},
+		SecondName: entity.Filter{Like: request.Params.LastName},
+	}
+
+	users, err := h.userUseCase.Search(ctx, filter)
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.SearchUser400Response{}, err
+		}
+		log.Errorf("failed to search user: %v", err)
+		return api.SearchUser500JSONResponse{}, nil
+	}
+
+	response := make([]api.User, len(users))
+	for i, user := range users {
+		response[i] = api.User{
+			Id:         stringPtr(user.ID.String()),
+			FirstName:  user.FirstName,
+			SecondName: user.SecondName,
+			Biography:  user.Biography,
+			City:       user.City,
+		}
+	}
+
+	return api.SearchUser200JSONResponse(response), nil
+}
+
 func (h *Handler) GetDialog(ctx context.Context, request api.GetDialogRequestObject) (api.GetDialogResponseObject, error) {
 	//TODO implement me
 	panic("implement me")
@@ -194,11 +228,6 @@ func (h *Handler) GetPost(ctx context.Context, request api.GetPostRequestObject)
 }
 
 func (h *Handler) UpdatePost(ctx context.Context, request api.UpdatePostRequestObject) (api.UpdatePostResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (h *Handler) SearchUser(ctx context.Context, request api.SearchUserRequestObject) (api.SearchUserResponseObject, error) {
 	//TODO implement me
 	panic("implement me")
 }

@@ -33,10 +33,10 @@ func main() {
 		l.Fatal().Err(err).Msg("unable to connect to database")
 	}
 
-	err = db.ApplyMigrations(flagDBAddr)
-	if err != nil {
-		l.Fatal().Err(err).Msg("unable to apply migrations")
-	}
+	//err = db.ApplyMigrations(flagDBAddr)
+	//if err != nil {
+	//	l.Fatal().Err(err).Msg("unable to apply migrations")
+	//}
 
 	userStorage := postgres.NewUserStorage(conn)
 

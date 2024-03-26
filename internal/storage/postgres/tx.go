@@ -10,12 +10,12 @@ import (
 	"github.com/soltanat/otus-highload/internal/entity"
 )
 
-type Tx struct {
+type PgTx struct {
 	conn *pgxpool.Pool
 	tx   *pgx.Tx
 }
 
-func (t *Tx) Begin(ctx context.Context) error {
+func (t *PgTx) Begin(ctx context.Context) error {
 	if t.tx != nil {
 		return nil
 	}
@@ -27,7 +27,7 @@ func (t *Tx) Begin(ctx context.Context) error {
 	return nil
 }
 
-func (t *Tx) Commit(ctx context.Context) error {
+func (t *PgTx) Commit(ctx context.Context) error {
 	if t.tx == nil {
 		return fmt.Errorf("tx is nil")
 	}
@@ -39,7 +39,7 @@ func (t *Tx) Commit(ctx context.Context) error {
 	return nil
 }
 
-func (t *Tx) Rollback(ctx context.Context) error {
+func (t *PgTx) Rollback(ctx context.Context) error {
 	if t.tx == nil {
 		return fmt.Errorf("tx is nil")
 	}

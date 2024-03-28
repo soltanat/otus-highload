@@ -5,8 +5,10 @@ gen:
 lint:
 	golangci-lint run --fix
 
-up:
-	docker-compose up -d --build
+up-async:
+	docker-compose -f ./postgres-async-docker-compose.yaml -f ./docker-compose.yaml up -d --build
+	docker-compose -f ./monitoring/monitoring.yaml up -d
 
-down:
-	docker-compose down -v
+down-async:
+	docker-compose -f ./postgres-async-docker-compose.yaml -f ./docker-compose.yaml down -v
+	docker-compose -f ./monitoring/monitoring.yaml down -v

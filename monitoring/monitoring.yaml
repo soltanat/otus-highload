@@ -1,0 +1,88 @@
+version: "3.5"
+services:
+  vmagent:
+    container_name: vmagent
+    image: victoriametrics/vmagent:v1.96.0
+    depends_on:
+      - "victoriametrics"
+    ports:
+      - 8429:8429
+    volumes:
+      - vmagentdata:/vmagentdata
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--promscrape.config=/etc/prometheus/prometheus.yml"
+      - "--remoteWrite.url=http://victoriametrics:8428/api/v1/write"
+    networks:
+      - vm_net
+    restart: always
+
+  victoriametrics:
+    container_name: victoriametrics
+    image: victoriametrics/victoria-metrics:v1.96.0
+    ports:
+      - 8428:8428
+      - 8089:8089
+      - 8089:8089/udp
+      - 2003:2003
+      - 2003:2003/udp
+      - 4242:4242
+    volumes:
+      - vmdata:/storage
+    command:
+      - "--storageDataPath=/storage"
+      - "--graphiteListenAddr=:2003"
+      - "--opentsdbListenAddr=:4242"
+      - "--httpListenAddr=:8428"
+      - "--influxListenAddr=:8089"
+      - "--vmalert.proxyURL=http://vmalert:8880"
+    networks:
+      - vm_net
+    restart: always
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:9.5.15
+    depends_on:
+      - "victoriametrics"
+    ports:
+      - 3000:3000
+    volumes:
+      - grafanadata:/var/lib/grafana
+      - ./provisioning/datasources/prometheus-datasource:/etc/grafana/provisioning/datasources
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./dashboards:/var/lib/grafana/dashboards
+    networks:
+      - vm_net
+    restart: always
+    labels:
+      test: test
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor-arm64:v0.49.1
+    container_name: cadvisor
+    platform: linux/arm64
+    #    platform: linux/aarch64
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
+    networks:
+      - vm_net
+    restart: always
+    devices:
+      - /dev/kmsg
+
+
+volumes:
+  vmagentdata: { }
+  vmdata: { }
+  grafanadata: { }
+
+networks:
+  vm_net:

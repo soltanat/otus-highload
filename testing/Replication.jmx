@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan">
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
+        <intProp name="ThreadGroup.num_threads">1000</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
+        <longProp name="ThreadGroup.duration">900</longProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <intProp name="LoopController.loops">-1</intProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">8080</stringProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
+          <stringProp name="HTTPSampler.path">/user/search</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="first_name" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${__V(${__chooseRandom(Кар,Кир,Диа,Юри,Фил,Дем,Яко,Гле,Зла,Ром,Яро,Юли,Вар,Анн,Анг,Алё,Мир,Дми,Ник,Оль,Гри,Нат,Вер,Тих,Лук,Пла,Мар,Мил,Вал,Ста,Сав,Мак,Арт,Гер,Анд,Ека,Мих,Лев,Нин,Ева,Зоя,Род,Фёд,Вик,Соф,Ири,Люб,Лид,Его,Ана,Кон,Оле,Бор,Мия,Евг,Ян,Сем,Арс,Яна,Сте,Вла,Лео,Гео,Дар,Све,Роб,Все,Али,Кри,Ари,Вад,Иго,Ден,Пёт,Уль,Ели,Лил,Пол,Вяч,Але,Пав,Над,Дан,Свя,Май,Гор,Иль,Ива,Таи,Рус,Ада,Ант,Еле,Мат,Сер,Тим,Вас,Тат,Зах,Бог,Ксе)})}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">first_name</stringProp>
+              </elementProp>
+              <elementProp name="last_name" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${__V(${__chooseRandom(Абра,Авде,Агап,Агаф,Агее,Аким,Аксе,Алек,Алех,Алеш,Анан,Андр,Аник,Анис,Анох,Анти,Анто,Арта,Арте,Архи,Аста,Афан,Бабу,Баже,Бала,Бара,Барс,Басо,Безр,Бели,Белк,Бело,Беля,Бере,Бесп,Бесс,Бирю,Блин,Блох,Бобр,Богд,Бого,Болд,Боль,Бонд,Бори,Боро,Боча,Була,Булг,Буро,Быко,Бычк,Вави,Васи,Вдов,Вере,Вешн,Вино,Вишн,Влад,Влас,Волк,Воло,Воро,Высо,Гавр,Галк,Гера,Глад,Глеб,Глух,Глуш,Голи,Голо,Голу,Гонч,Горб,Горд,Горе,Горл,Горо,Горш,Горю,Горя,Грач,Грек,Гриб,Григ,Гриш,Гром,Губа,Гуля,Гуро,Гусе,Гущи,Давы,Дани,Дегт,Деме,Деми,Демь,Дени,Дмит,Добр,Долг,Доро,Дроз,Друж,Дуби,Дубо,Дубр,Дьяк,Евдо,Евсе,Егор,Ежов,Елиз,Елис,Емел,Ерем,Ерма,Ерми,Ермо,Ероф,Ершо,Ефим,Ефре,Жаро,Ждан,Жили,Жуко,Жура,Завь,Зайц,Заха,Звер,Звяг,Зеле,Зими,Зино,Злоб,Золо,Зори,Зото,Зубк,Зубо,Зуев,Зыко,Иван,Игна,Изма,Ильи,Исае,Исак,Каза,Кала,Кали,Калм,Калу,Капу,Кара,Карп,Карт,Каса,Кась,Кире,Кири,Кисе,Клим,Клюе,Княз,Кова,Коже,Кози,Козл,Козы,Коле,Коло,Колп,Коль,Кома,Коми,Конд,Коно,Конс,Копы,Корн,Коро,Корч,Корш,Коса,Кост,Кото,Коче,Коше,Крав,Крас,Круг,Крыл,Крюк,Крюч,Кудр,Кузи,Кузн,Кузь,Куку,Кула,Куле,Кули,Купр,Куро,Лавр,Лаза,Лапи,Лапт,Лапш,Лари,Латы,Лебе,Леви,Леон,Литв,Лоба,Логи,Лопа,Лосе,Луки,Лукь,Лыко,Льво,Люби,Майо,Мака,Маке,Макс,Мала,Мали,Малы,Маль,Марк,Март,Масл,Матв,Медв,Мель,Мерк,Мешк,Меще,Мина,Мини,Миро,Митр,Миха,Михе,Моис,Молч,Морг,Моро,Моск,Мура,Мухи,Наза,Наум,Некр,Нест,Нефе,Неча,Ники,Нико,Нику,Нови,Носк,Носо,Овся,Овчи,Один,Озер,Окул,Олей,Орех,Орло,Осип,Остр,Павл,Пани,Панк,Пано,Пант,Панф,Пара,Парф,Паст,Пахо,Петр,Пету,Пиме,Пиро,Плат,Плот,Позд,Покр,Поли,Поля,Поно,Попо,Пост,Пота,Прок,Прох,Пуга,Рако,Рого,Роди,Рожк,Роза,Рома,Рубц,Руда,Рудн,Румя,Руса,Рыба,Рыжо,Ряби,Рябо,Саве,Сави,Сазо,Саль,Само,Самс,Сафо,Саха,Свеш,Свир,Сева,Седо,Селе,Сели,Семе,Семи,Серг,Сере,Серо,Сидо,Сизо,Симо,Сини,Ситн,Скво,Смир,Снег,Собо,Соко,Соло,Сомо,Соро,Сотн,Софр,Спир,Стар,Степ,Стол,Субб,Суво,Суда,Сурк,Сусл,Суха,Сухо,Сыче,Тара,Тере,Тимо,Тито,Тихо,Ткач,Тока,Толк,Трет,Триф,Трои,Троф,Трош,Тума,Увар,Улья,Усов,Успе,Усти,Утки,Ушак,Фаде,Федо,Фети,Фила,Фили,Фирс,Фоки,Фоми,Фрол,Хари,Хомя,Хохл,Хром,Худя,Царе,Цвет,Чебо,Чере,Черк,Черн,Чесн,Чижо,Чист,Чума,Шапо,Шаро,Швец,Шеве,Шевц,Шест,Шило,Широ,Ширя,Шишк,Шмел,Шуби,Шува,Шуль,Щегл,Щерб,Щуки,Юдин,Яков,Яшин)})}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">last_name</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request By ID">
+          <stringProp name="HTTPSampler.path">/user/get/${__V(${__chooseRandom(c7e4fd00-4dbd-422c-8e40-569881709148,f03ef859-375a-4039-9a27-460740c87eee,644220f7-25cd-4428-825b-1d2cb39b8675,bc66fc9a-ff2d-4d72-81d9-0f1627d0dd6b,086f8381-2867-48c9-8980-2922c783962a,d3f19a7d-e99c-4877-9bb3-b663a8616093,40aeb475-da6d-49ca-9276-728e6463751f,c5b6a306-df64-43ac-8209-d7e694f68ab2,c990cd7f-682b-44a0-aca1-51983f1e6ce0,6eb32405-15ff-4f01-8623-13c93f7e05ef,e0e31084-ae25-476c-96c9-1394c8c74b6b,c853b8a3-acd4-4b0b-843a-014447476205,44f33a9c-9e14-45f3-b928-e86040d4d5eb,27ba8918-13c4-463c-b34c-fe6624f399a1,6e6a0c62-c8f9-4832-bf60-f5e8788e2a38,5dc6ff2e-e7d2-42ea-8547-f12a96e3e068,b349dc39-cf45-450a-9eca-b041cf378436,b05ac302-7749-41a6-a994-2aa2bf296189,90b3a554-29bc-4e1c-a24a-1b8d6b700c41,47d93bf2-9941-4267-a3a5-7f475ca545bb,9be56d46-14a7-4844-b063-18b8977e0035,9bcac917-4fff-4c31-8bca-1256348807ff,75a2ab17-7488-48c2-81ec-1511279b5fb1,3899712f-081c-49a8-a87a-e5a85d7ade09,6c48163a-8f59-4e88-8264-26704706edcb,3fbba01f-f1ea-4c08-853e-f93daf2c733b,afd476a3-ff12-40f4-a587-67b904b777f1,209e5eb7-a2ce-4dde-8760-6cb432a338bf,07936af6-283e-4071-bb3e-50fd65dd8a1d,bfc78c50-ee1c-4e37-a4f2-b61d59a4d571,fe15d880-5c17-4d65-b257-592205753b4c,68442847-5da3-4459-9f18-2670d22bec74,624af752-0427-45a8-abb9-39be17426f84,819b3a20-d085-4cea-ae3e-5d39014ec783,1d859333-ec96-4040-852f-a2951f5c510a,f59bc30b-b0ca-4c59-a534-fb9773113932,211611cb-31ad-4461-a4a4-f9f1db7aace7,bbecd5e1-f895-4518-846a-7a837821f84a,2e8435b8-ca44-465f-8e04-f3cc2dc26e9e,0d09e65d-93d2-41b5-8acd-eb1569a59708,6378effa-aa24-4761-ace5-c27723f1e329,ae5780cb-a537-4c93-ab7f-ef392648661b,e139b65c-53d7-4b2c-9072-6f3a1785676f,19fd5443-5496-4400-b2b2-3f234f35a947,0ff3ebfe-e32f-4b28-9d50-2e1500be42f3,8312a499-24dd-48b1-81d5-398af956dc85,9a604fe1-5fe3-466c-bc87-6e95bc3b31b4,ce55d109-0bc2-495d-bc8a-8025a851a13f,741020fe-0ef0-464b-9fc6-a1cda5cad49e,12476f12-7cdc-4945-aa3f-a4fe647c011b,c3242f3e-ef24-4172-9c2f-f8b7efa9b86a,f3881df9-843f-4315-abf9-24da63e2f786,1fad2603-3170-44c9-9de8-29e2affaad62,6d4aa4dc-9b28-4d0a-9ee3-58fa2dc86dad,94b88d36-43b1-4517-be53-0f3d5cdd7b63,a48057e4-31cb-4de8-8e50-fb99fa5971dd,c5ae5064-08d6-4389-95c2-1c7a9e5aef56,ce003092-db75-4f13-8103-715ce16b3e16,5ab5f638-5b4a-4b3e-9ea9-add4495378f7,70baeaa0-98c1-4eca-bfe8-aa98fb378cd2,8b3188c8-de5b-4377-a4c4-da03ef2b24ef,e61be72a-8815-4421-a12a-b106937d1fef,0b9ea436-1a4a-4665-b60f-7b033d888d12,2bc4bfb8-3d85-4a06-8baa-94ad8bacc387,65521866-0049-4260-ad48-8ae3ede5e39a,c9c4f807-212d-464b-8dc9-d94bd2a96a7b,ba2d77b7-e798-4a89-b280-1563539837da,e6e64014-4cc9-4f5e-9694-d87b7c401b08,d5062cad-5672-48df-8b96-37eaa7806419,f4bd7410-99ac-40b2-aa83-910643d0ce6a,f659c3cf-7787-4859-9d95-058bfdabc4e8,4b447007-958c-4de1-8fcc-8b1f5997ef9d,f80f6d5a-cdf3-437e-9ce1-0c0682a51ed5,4f86f727-d74d-43ea-bc26-36fa01e5c679,8b929f7b-dcc0-495b-8d48-6be5c0040488,6954bf65-f91c-40d4-aefa-2c81af0eb633,f44244e5-1cbc-4cb9-a545-b65a99bdd24a,122b564b-ddbf-4393-bd41-bc8d99cbf8e6,25e7941a-17b5-4720-91e4-2ea9b7b26a19,3807daa3-13e5-4cac-ac80-20f8fec868c8,cd895fc6-4f5b-4622-aa44-33872f268ea0,d166b0df-0cf3-4908-9e62-0912764508ba,3ff36cd7-1a0f-463b-a137-725175e351aa,853eeb84-2836-4ea5-99c7-f4fa79023673,d5b83c66-f4ae-4f72-82ff-806b9ce402a7,4350b257-bde3-49fb-8820-a7994d6c835b,fb6d6bd9-a11f-4ef1-b7d9-2ccacd640623,cd60a42b-9742-4f35-826a-01ef57a39587,e457023c-a3db-4c7c-b6b9-85c5b2005c6f,825a86ec-8298-4b8e-a052-94c8a52d6a5d,b7d36948-230d-496e-9dab-66693b84bf0e,302949de-370a-4d95-a1ab-f8bc007c03c9,3c9a5764-bbea-4ecf-9362-68773fcba08b,b73568fd-4bb1-4dab-b9c1-700901e6a4ff,a55def73-a9ed-4e29-ba28-022c8c7eee7c,3d142bba-48cf-4773-a79a-556ddecd5bf6,033e1420-c553-4e7f-a998-f35de11f88a2,d22e0211-6964-4a15-ad52-f0265cd1cf0a,533ec881-b343-4642-bed1-1c732378bbd5,2ef428b2-7991-47bc-90bf-084d7731701d,bc322410-f0f6-46f1-a0d1-83b5c8237e45,f12129ad-c7a2-4479-849b-5d44fc0ad634,e9c344af-4166-4f16-a1bf-87cbbbcf79fd,381a2b62-f8d0-4378-b5af-f4e4333ce478,21c7a672-6ccc-4967-8770-6113ed910302,aac916a5-64f8-4418-949c-ef1692382cab,b8238370-98af-4b69-a1ed-7f446c6daeaf,0c8befea-ecbf-402b-9f98-ecf58078f094,949b0904-18ed-4001-aefb-a02264de20fc,6581469d-3c06-42e4-b3ef-c4473bf5ffde,7f2334b2-2526-43e0-b9c7-74835c11796e,df42e9a2-1777-4a34-b25e-a3c3566c6a2d,f821791f-7e54-4034-9c87-c09996be9aac,a9e7d02a-267e-4454-bc8a-0e56dccff3f1,5f51c8f8-860e-48ab-9729-b76d9cefd1e7,0cab7efc-5bd5-4373-ad18-73da919660c1,e5a12f5d-7ccc-413e-b7a5-1aba5712c55b,d5321813-b2c5-45f3-8e8e-fd3ac59fabb5,e9a46f06-ac86-4f85-be35-44f39bcdc303,a705db2c-bf04-4f53-a0cb-23f732b8dab6,2cdfcdd3-d711-4ae1-b02f-d8b4ab7cb8e7,44c7ac8b-26b5-428e-8811-9d5c70556a1d,c07d58ba-ea26-4a3b-957d-0cb2256d8839,387a4fe1-c8e6-4b82-a63f-e2066ccc8ebd,e318b1dd-acea-4ce1-a855-7dea0acc0f32,5cb2aa88-b8c4-4709-929a-0191b2be9f60,3229f4f9-586e-4658-a12e-c06783785956,36946c55-65c8-461b-8559-bfbfe3eee227,9d6b3d11-5365-4425-8fa4-5924809a0381,516d7160-9ee0-441e-a142-98011ce1c7d8,cae1bab2-b028-444d-b274-d1308df38c4b,cd7d7998-7f7e-4ce8-8b71-a0868a537d29,95ca6e0e-b54b-45bd-87a3-d3a1b990560e,aaccf519-2e1b-44ee-a7d3-df2b07f21153,5db6f20e-2761-416e-9f21-b1ef784cbfb5,f93b9b66-0113-4f31-ab51-29b48a019754,0d849cd7-bd2c-474a-87b9-31c76c5add7b,e00f577a-98b7-47e2-b80a-c579978088ac,33248d7c-32d3-43ab-8f75-5c164cf026c8,a1d75a24-15fb-4e04-8fac-a24bdaf4b58e,6e017a7f-100b-4977-b626-702b143fdfef,d4a6e5c7-813e-4dc0-8e3f-026f6da728c9,58e38231-d0fb-4cbe-baa6-9f0f48f7f825,fbb3663c-6b09-49c4-961c-be6dd50aed16,61ef3242-3f03-4f82-9669-2e326af5d70c,9cee131b-e3d5-459c-b752-bacd19c60180,a2d8a35d-f862-44d9-9282-9a9ffc862473,cc64863a-201b-40dc-953c-81c60501024c,c770970c-81e5-4b08-9dad-1467e8ccad71,de0b2b1a-c7f3-4bfc-ac83-928e096d7190,5097e0a0-a6e1-4bbc-bac3-01cdc4348611,26e7f66c-fc62-41ab-b257-2addf407e836,a39d9621-4cc9-4c57-97ce-776ae044731f,d26e8862-b70e-4da4-b252-9baa3db06cb7,0cd4d761-ce68-4250-b7ed-62cb3c62d5fc,050a7efa-bd8c-4018-985d-01df58b0c12a,65b5db61-d0f1-4d0c-92a8-a9b30ae2763a,cd4a9623-3568-4b96-a4a2-7bb270ed0e64,b391353f-407b-4b05-bc94-655d903ed07e,6c819715-3c2a-48f1-878e-6468c19898f0,e3a4e10f-a5bf-45ef-93ba-bcc29283eb00,e06965af-ee5a-48c7-b801-0ac275105df5,8ca95698-2b2b-4ab2-a31e-b9a91e941982,121d39ce-2653-4f0d-9e06-8f447616a020,3fca2366-19c7-4a4c-8c5d-1b6adb603400,e29e107b-b8db-4f1b-9c6d-27a815630804,24e0250d-aa6f-40ce-8a22-44da84189b4c,e15123d2-ae14-4227-9221-1dcd0a65aa89,287b5dd9-a6d8-4523-8aa5-21193b8a8b67,50138346-7de0-4bcd-9625-cbf85984cd59,9ab4396f-fe62-4943-8482-a2c5e6e56c32,50cf0241-e644-4dfa-a8a7-6e21806c039d,d50d5a71-34c4-46fb-9bdd-4564dc0b9da7,14584ee9-2786-4359-9d1a-9736022e888b,430aff95-98bc-4ccd-b373-0f35496c5873,b7ec2c58-57e8-445e-9276-9ff6aefe0373,e6b03fa8-b319-4f8d-818e-4d92fb534212,6796b2ab-3c9e-46c5-9154-fe8809d8410c,dee13fbc-9eec-485e-b990-522d325cd81d,6b0d1644-ab82-44c2-bbc2-6df3d46502c9,3cae9185-bff2-46bd-9af7-e11288193986,2fa84850-29c4-42db-bb49-d3cfc488d148,2309f859-1001-4f39-9563-c823d8701afb,13c2938f-be30-49b5-b2cf-d2abe13177ea,3cd801e2-2476-4b9a-b4bc-b537a00f8226,9dbc00f0-11fc-4dfc-90bd-ac678b21cf06,8309c3df-dbc8-42fb-b85d-52d754295fa5,de82f2e7-ed80-4bb8-b887-94cf2c286b87,933e4b13-e3d5-47ef-9374-c3583f096c85,f6b0282d-3288-4e81-a51e-b7d5f43db51c,29b62d9b-fa4c-40cd-a23e-2586e31c08f1,6275eeb4-2e90-43a0-ad87-116b4094c4ef,4489f217-9365-4917-87ff-6423ba273993,089bc94d-93b2-46c5-9e52-8a48be889db3,b5dc0e0b-18af-4e8a-a7e8-5e1cb95f68f6,c6767579-ac54-4464-8e4a-6c48f556822f,ac0b1b59-d8e4-4215-b205-9ec1a4638198,5e5a607c-c5fa-4bc7-8a3e-24e3eb649b15,e75a812c-03a9-42ad-b4f9-72bd999871f5,218cb605-05b3-4318-97e0-659da8288bd4,9c27ebdb-00f1-4045-9368-a949ff44ab72,acbde93c-0faa-4d19-85af-0ff29589829b,cfee6dce-0fb4-45ca-9092-beafc5589a50,d487e60d-1838-432c-a75d-048b88cd265e,8d6fcde1-bbc3-4bf6-ade9-e95828371bb6,5a57a313-387c-406a-a041-9b11e500ed48,69696f2b-e8d5-4dd6-b94c-670ca16951d4,8ccb89ca-424a-4bc5-ae7d-6418690ddd93,c33e62ca-4fae-475a-8a66-94b24321f7ae,92a35a76-2e07-4f59-8853-6ee88bfac561,3942c7ca-0a54-43a1-81a1-dd04bb553b3e,3d51e4c8-434b-4406-ac87-45d3134adfd1,cab17093-1437-4853-979d-38b0de681f10,3df8c158-3da5-4605-b1f5-3410e49ac43a,55fdb8c6-6db0-49bc-b25f-0010fa7b323b,0fee01f7-ce7e-4f06-a15d-c1cfdd3c1fb0,f06d2065-4f5a-495b-aced-0e1857a48539,4157e473-b0a9-4fd2-97b3-b632b46dfa0e,d0a2e206-0d13-48bd-ad78-ab5bf9a82a87,fd102198-873b-44b1-bb00-03ea54191ed6,8f1afae7-993d-4a0b-8091-79b4b7fbce36,27baeec1-bc19-4e55-a55f-fe5b44970022,033b21db-6584-4ed3-a8e2-9a30dc1bc465,30428f26-bf19-4ae4-8b89-d3cc2c5187c9,f34e16cd-6480-422a-8cd5-5e3352bfe1b7,ec75e089-9264-4f33-9879-7722ba669687,9305265e-9e71-4377-a4f4-f153fe752964,1ac89d8b-0462-4b25-b776-8359ff963051,49aad60b-a707-4cb3-bcbd-8be34a34350b,afdf14a5-c2b9-4365-b94a-620713eeaca9,d471b55e-42fe-494c-84a2-f177ff4f2746,cfccf4a5-ed01-4650-a83d-3b60a1d007ae,cd8e2078-7f76-486a-ae14-548e5703f23c,ce136f92-4e78-4551-a059-1c3328965f4b,cfe55a73-3d95-42cc-b3d2-cd4d62fdb9c5,6f83ea6b-f663-4842-9b15-54f7a32ffd84,db9abc98-c380-4759-abc0-b3713fd35954,3f957a35-7673-4f89-a522-02e8d70c7187,6845b0d6-ada6-43f4-9724-20276b55bf0b,9dfe0bc3-21c0-419b-bbea-d93b3699193d,c2f4e307-e481-4dae-a2b3-3d24a52f12f6,059082f2-8f9e-430d-acdb-4040222c4427,6ac11f80-3b11-4310-81f0-93ac9500f8ab,d5e6bf11-046e-4832-9e40-ace99740aba9,a384da65-d7f8-4e9e-9baf-5264176c1c29,8e16e933-a823-44f6-a587-7e7f8a074f8a,45a3a077-ebbb-4baf-bfc6-1f4547d7018d,71e87974-db8c-45d3-8d79-4e9ec36457a5,37a32619-7999-44d4-93c8-230384aef421,0009d850-9990-40ad-967d-099291d4a3a6,b93c0d5c-a164-4821-bb97-9a71648fdec1,74725c9e-844f-4049-955a-423f48511faa,8677005b-ac92-4cea-85c0-b5f6ee2cb1e4,c6d3c61e-21c0-4727-a9bd-e14303fe75ae,5fceb1b6-90f5-44e4-8feb-d377fbbbdfa0,bcd25793-d744-4bd6-b02c-3d597cc0f01f,06370ce1-5f3f-48ec-8b24-0c05a118e93b,b4ee0f33-5f7e-4734-91c0-ca5cbae4b847,f58a2625-4bf9-4c19-9e34-68ae66de2369,92da976c-b44c-4bec-90c7-8a1670bfd370,4c593155-5cbe-4019-a717-d66c6cb56954,3a8bdfa1-7d94-454a-b52b-fe03ffac9c82,9c8cb96c-3f3f-4063-932b-4a3cac04d96c,389a1ea0-fe50-4030-8976-8a8b76e01e06,b8e01d52-8615-4023-83a5-9905113700c9,228003bd-322e-4fe6-b85b-920d12667cbb,8c339039-2f92-41b2-ac12-7ecfc980aad0,a4b444e8-85e7-48b6-8d59-d934894c0b4b,ad4ee7d4-b3a7-45fa-a97a-0c20a58b678b,3a6a338e-0361-4625-a1fa-927dec4d8945,274787e3-723c-4b00-882b-99058f4744e9,345cb968-775a-4eea-891d-4591882e8bdf,813cb7ae-97bf-45fd-bf2e-00338f05d9f4,7cc1c043-f469-459c-8414-133e50f58621,4749a5b4-4eb6-42be-9ee7-8b54f737c84a,83bacc28-89e5-43c9-8879-04753b424ef7,423a05c0-63c5-4289-9c91-17f2e124a555,5948c68e-d916-4ab8-ac3f-e7f4da7358b8,5923a87c-3340-4401-87a2-3c8ef542f75a,b38d4c90-7186-45b4-96be-99d4c6d946ce,b895c668-c885-485f-abed-b6c72e1ecb42,5fa9970d-aafd-4870-b701-bff2085d60b3,e7c8d59e-9c6f-4da5-b185-5c1f2b822475,71568105-266c-44e0-b3e3-54242bbbcbb9,1db0241c-da27-48b4-b669-bd9de239345f,db895eac-4ef8-4196-9f20-6093aefe7a83,cdc905b7-f85e-43d7-818f-7599d9446ae2,b3024cbd-e052-4355-af44-a3f0666dac96,97934ffb-9822-481b-be5b-bd4f52129b16,e441c49a-a115-4a3f-9cc9-4baa531c4d04,a103fefc-8e63-4288-aa2b-b8edb1c2d166,9aa0276c-3a33-434b-b9ae-d5c50865f4e0,29c1596d-3611-4850-ae4c-b32ec3d4e167,64f6b526-8c97-4332-b0cd-939fe7aee781,c17bba24-4030-40d2-b85a-d1e8544964da,8d4d85e3-be75-4ed9-9907-70734d20afc7,b5fce83f-10b3-421a-8e56-260ba531f8a3,f968cf5b-04fc-48b3-a159-8b6d3d1c6046,47bb6830-7b8b-426a-bc52-a2419eaba086,81d451a1-b9e8-4a18-851e-75b1f0d78add,9f57d756-1114-4c0e-8071-e69214fd78e1,c892a3db-f5fc-4272-bd26-6c77327f4b85,c1b078d8-4357-4c33-8a11-0ab04bc2dc78,d7815665-33f1-4f48-82a5-62dc58b2f1d6,e66d5f3c-d98a-4791-8bec-c38f0903ceab,0c41ad5d-4f07-4924-b8ab-850541ec80c5,11a57497-e5f4-4c35-b649-6811f1eafc8d,cd5cf202-1cdc-4be9-96a9-777bbb4d59f6,87a048db-fa3f-4a32-84a0-caf7477f35b0,a8260072-1776-4086-9e70-96fd789bad7f,069f57db-86c3-4bce-859e-ead9d85e037b,8d354c07-03e3-4834-a673-a4f9e819f4b0,7217b518-bb74-46ff-9b32-5a1c9b18cb46,d7eff153-affa-4c02-a3b6-1613bbfe4d7f,fbb292f0-562c-4766-aa98-1cb341d5f3f3,b6bd5463-e56f-4607-a616-33d030d38668,4b9c3352-5e1d-45f0-9f3d-480114036985,98f3f00c-6b6f-4d1e-9abe-b54861c47fd9,b53c2a5d-0d3c-40b2-8476-c1b28c0c6455,a869f976-0a2f-4f0e-8a9e-a630a1bf7ba0,e6d02e6f-b78e-4896-9a14-08e38087d3e4,24f3c6f3-12d2-4541-85b6-4aaac8fdfe87,99bcf7f4-c4d0-46ea-ad56-824b560de35d,8f1c9a0e-2ffe-4602-bb1f-ef494433d3a5,dbc1b499-782b-4d80-bfac-f333cd0af1b0,4176dd89-f00e-492f-971f-6bf507e42e90,301055fd-e017-4d92-82e8-1e5665c2a72e,b1cbdfae-0f1d-4054-b4c7-eddb704f20f2,cc64f747-8aa6-42c7-9e57-e5afc4fd840a,c423b6b9-361a-4223-b9b1-2ae55a4505bc,9f2d380f-56a7-41b1-a318-fbff97bf5076,9d7fc31d-db83-4b4a-a48c-25f7e1cdf40e,07e024e0-6938-441b-827d-d6de361e75e6,c4d296b2-0fa5-496d-a2c9-e2821b383582,5c332232-3e2d-4ad7-8850-c7beca07e7c0,5f0776c7-af33-4add-a6b9-a25a9e15644a,f647a5e0-a958-4f43-a37e-c7dc17f74903,fbb3e674-a2ac-4386-85ba-ddaf3899d52c,bbc1dcc6-e7cd-4886-8e5c-c368cd99e75b,c4755ca1-e33b-4a1e-b9a3-6fecb05f461a,636bfbfc-481b-438f-9a78-3b37ef98e38e,551d3677-34f5-4547-88d8-b8fccb7bde06,c0414f83-7ea8-4d19-9c75-1ac0e04f0480,5509074e-c7fb-4592-b8b0-2dae2f761868,478e2cc1-6fd5-4eb7-9654-2fbbd14c3e86,c2d95751-a78a-4713-bd55-c4d65164b06b,fe3ec7a8-b43a-4d8c-87ca-fa732e458a4f,61dceb08-855c-4940-90a7-e574e03e5c5b,ece3c2c1-cde6-4607-a099-025e3678d25a,f22709cf-97d8-4c7b-bc87-efca58bef90c,46e0f122-af53-4841-9a36-9fef3521d7aa,da2d24ef-8a0c-454c-b71a-6f1242c4dda2,ea9fc51b-1140-4e1f-9f19-bc03b20c8ffd,5c4be4a4-b4fd-419c-bdf2-df9afe63d4e4,b232112d-2294-46bb-adf5-fc3d04ba3d79,5213fb7b-babe-4b19-99a7-c5b8c0e479bf,5760e74c-8602-4cab-af79-07d5fde5b74b,4090af3a-1339-46b0-ab58-eb60c0fcecd4,28b98a66-79ae-45c7-ba10-8a869a91a4d5,0b36c2c1-a0ea-40b7-bacd-9bbf554bd1dd,966ab6a0-cade-4e0e-a308-ff5269e770d4,1f11cebd-4462-4cd4-bde5-5f0e83d8faac,1eb02c1f-113d-45a8-8496-78b860524032,2af3bc39-e5e7-45e8-a0ae-4dba55a187ab,5c6900d4-161c-4607-afd2-43104d93ca45,8faf539b-55df-4e01-8974-ac97f6588542,10410985-2613-48c0-8cb4-0c3ed0465a92,f3b4f912-84a0-47eb-acf2-ef4ca379e02d,0258c00c-069e-4876-8d93-3d7fa608e2f2,061e39db-c092-4a7c-bb61-303ede46867f,ede6a47c-9743-420b-a00b-6052cb1ba4c6,e86580b4-cc62-4de7-a694-81a31c267bb7,7b7a67a1-d4f1-4879-9ce9-2eb5c3c76a82,23a1d581-f841-4ab1-a774-28328f44f592,ba0d7b4a-2b31-4676-8eb5-3b6aa542ec65,048a4649-d447-43a6-9904-e4d770c891db,76b3b63d-f9fd-4f95-b7a7-24f461eccba6,4a50280f-ae3e-456a-8a1a-058717986581,951bce78-d756-46aa-a5d6-aa4f642ba1b2,1fc133cf-6af6-4f56-82f5-ea53c0e92469,a82abd9a-7dbd-44d5-9a35-63641c5f3371,8a26f886-809c-47bf-a22c-f08c8c0c28ae,5d45c847-ed02-40e6-973a-9e9508e52bd6,00a88903-e6d5-4619-98dc-52c089678ed2,f2ef120e-65f9-4e5a-9fc8-f4d52ac55980,02c38823-3e5d-4ec6-9468-41e7f643b96f,8719904d-d102-413b-b4dd-bc7e6537990e,407e8364-48fd-499f-9e7e-7d12a9c493e0,57e6deb5-5554-4ddc-89f6-a9f8ef8b8ac1,c49ce4f8-a3e0-42ae-aabe-21a01d17213a,e1524237-e6c8-4f9a-9dbe-6e1cf7c8d856,6f5ed464-33ab-46da-88fc-3b70428e4649,f65eff84-cdad-461b-ab52-d967571d4aa7,34e27983-9fd0-4acb-aea8-7731faaf0611,d1f3df15-1a6e-4ca8-8d78-77205ba54e2c,d478b5ee-5e41-4f5f-90f0-189eb54e68be,309bfb44-5fbc-476d-a8f2-246d8a161beb,1495cbf8-85bb-40a4-98a3-97d57e2a370f,9c5d9dc2-a9b3-4173-99af-c19240f23b1a,cd32aa2e-90fc-4d39-b0ff-c7f4d45c4205,b91db850-f911-4c44-bd6a-ebce9ee5a872,1f90ff93-4140-4e77-91f1-790ab3381230,8cb92e48-374d-4412-a688-c4a4b602992f,4b3767ac-cba1-4344-a22b-cfb9a36aeb58,3246a79d-9d49-421b-afdf-b574eea30ff6,c9008677-436c-4145-b0e9-6d6fd3e22f75,39694681-d36c-4481-b428-fe667160a9b6,7d5a9484-f9f1-49ab-a254-78b865e59be4,f26f2ffb-54fa-464e-8f0f-21e7036929bc,87b89902-764d-4d72-92b4-0c216b8b37b9,9b545d40-11f1-441b-8556-5e4dac8eb29b,86d423e6-a3bf-4427-b76a-2df87e5f4843,66e68b37-4362-48e0-89a9-8cf7043f0f4d,e4145365-8345-4224-a384-59878fefbeb4,1015b886-4fca-4504-b230-fbc056100d39,ea2c4aec-4c8f-43eb-a3ec-837adb3355b3,ac2e67a2-0375-46d6-ae3b-2a95b562eb3e,09448542-bd3b-4b70-b307-8c4f182ad3cc,b28f638e-dd89-4591-b017-e8975ddadf09,5f9435e2-403d-475c-aa16-ffe789771129,2cd356e1-408f-4390-be11-fd7d8970680c,7242c79e-b173-4011-a115-244916744d77,6ef9d71f-efe3-45ec-ba8e-df5495ec9ef3,56f90aaf-3351-4d91-b5f7-4073e14d4150,d49f127d-8371-4454-b836-d027bfb0bfb1,71721f0c-38ba-4e83-9137-1a3954364fdb,53644b3f-edce-48af-a745-646f26961ea0,170230a1-00d0-4294-bcec-b4ee34e61303,9c71d041-c53f-49b5-aa36-97770cbe5938,19a7e95e-63bb-4ea8-8727-d14f04d6cc61,70920247-faa4-4661-910a-68185be21043,52d0e35f-dd16-4c29-850e-55a92685393c,c3794d93-91a4-4e78-84f6-4fc75c8d6425,d84712dd-8413-4327-a7f5-855d3216e18b,108449f3-727b-4349-a9b0-014168a8aa0e,91c9d45d-bc1f-4741-aa9f-2810e1bd85e6,fd165a5f-cd56-46fa-abdc-f82af90768e0,d0fc35ac-45a3-4419-9c56-274d0ff5c2e0,21866c63-3e1c-468c-b251-0227a2610684,839f7af3-56e3-4d36-b24e-83dc2d9cd0f5,e6316dcc-3ed3-44b5-b48d-0c5f2b795b76,34268eea-c036-4919-9cf0-e7cf2c8d9eb6,1d473a11-a68c-4f03-926c-2bfa1486ece5,eb7b03e6-e66b-48ac-94c5-705d8227d7f8,112060c1-1a10-4ed6-a32c-ffb4efc22bf9,44b7cb0e-abbb-452c-8566-42147c20d173,37cea623-e9ba-40d2-937f-df2c6c29adbe,c53ee133-f920-4ad2-96d5-fae0377c26d0,b11f75a3-e8b1-4d54-996d-79f847c99023,695afe13-5dcc-40a9-815e-12c5b8631b64,7cf7889e-9b5d-40be-acda-7629ea6a52e5,22a7edaa-f2d7-44b4-b43c-6e2cbabe80c2,413350f3-051a-4f5a-901b-9e1e9b20d926,e6d446b9-87cc-48ad-a67f-b61eb0228ed9,e21c4833-8409-47fd-92cf-b5abaad9d11a,87b0846f-fc21-4435-9bf7-f691dfbe6025,aee53217-cb02-43f8-9c4f-c566e94bace9,5e1cc31c-a9bd-4aa3-8873-5313a673fccc,61b4c336-b0c3-4f74-b89a-38da606a65d1,d19dbf9b-47bb-4093-8b87-7f88cd03ab4c,46cb3579-e571-4f9e-ae59-7b843469e3eb,b90373ee-5693-40f2-af49-f459bcfab46d,3f71f2cc-b514-424b-bf29-2da1ce288ebf,910f0cad-03b4-4a1b-ba78-317ac5bb649f,99c6bff1-a549-474e-aa6d-c3665bfd6681,5c658303-a96e-481a-b211-29ce76c84ac2,0bdd4c68-c626-4f52-bd06-f6033c7eb055,f1492e72-fd1e-4154-85bc-7bf5f7f7092d,8bb30c13-7c99-4c3e-93d4-c12c071f84f1,dff831df-fabf-423e-bb48-6f86d7c09b7a,14894f3b-229d-4de6-826f-25db05bccfbf,eeffcef7-a6ae-4b24-8537-b598fae4c773,ac34db46-0307-4a14-92f5-18b8d858c61c,225c003d-b73b-48b9-aea4-62623a77155c,ff5437e4-0efa-494d-a354-a7d6b516a895,b9d38942-d919-4b8b-8f70-ef4931378aa4,a2535203-0442-4132-88a3-7c01badf0bb8,6852b45a-244b-409a-80e1-93c4680d17af,77fbcdfa-2556-458e-a331-fc0775bf4fb3,b338c647-8634-4c9e-85fe-be2eb7e5f088,da805a86-0ecd-407b-bcc5-60f0cf8b5319,0ebe45e5-5933-4fc9-bcca-1d6112b2781c,88bed08e-6d37-4ee7-b15b-41b513c21ba7,fdd41c43-7760-43c7-a568-7a2747c947c2,59c15f1f-d4f6-43e4-bb00-3de889a15609,eacdfbaf-7c85-478f-ab8b-afbc96330684,23b8edb6-20d8-4e42-9c78-552116ef4a7c,b8a88151-0fe0-4762-bfb2-39424d0117cd,2c38747d-5b5e-4bbb-92bb-c2f598c671a6,7349d063-be17-4356-a067-5d4732cb78df,a5cdc06a-925d-4e8c-8fa0-3757cedeaab3,8c86adac-9323-4a20-8e73-0aff7ee14fd3,957e519f-0e18-4ecb-a578-760ea48dceb5,3de8295f-2bd4-4dcb-b4aa-3def79aad526,6e2412a4-0e00-4dbd-8f93-b02060ab37b3,8e83676a-40ca-4b17-a08e-bc72339c779c,e829a3b0-5ad2-4f2f-91ce-334e7babb2d2,7740a196-ec97-4a00-a60f-1e5e8a5b2c39,7c7cd685-0843-41f3-962b-6e0900fb3cff,6c653327-cc6b-4378-8539-785e78c78870)})}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <com.github.johrstrom.listener.PrometheusListener guiclass="com.github.johrstrom.listener.gui.PrometheusListenerGui" testclass="com.github.johrstrom.listener.PrometheusListener" testname="Main prometheus listener" enabled="true">
+          <collectionProp name="prometheus.collector_definitions">
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the response time for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_rt_as_hist</stringProp>
+              <stringProp name="collector.type">HISTOGRAM</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets">100,500,1000,3000</stringProp>
+              <stringProp name="listener.collector.listen_to">samples</stringProp>
+              <stringProp name="listener.collector.measuring">ResponseTime</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the response time for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_rt_as_summary</stringProp>
+              <stringProp name="collector.type">SUMMARY</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="50511102">category</stringProp>
+                <stringProp name="102727412">label</stringProp>
+                <stringProp name="3059181">code</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets">0.75,0.5|0.95,0.1|0.99,0.01</stringProp>
+              <stringProp name="listener.collector.measuring">ResponseTime</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the total number of samplers</stringProp>
+              <stringProp name="collector.metric_name">jsr223_count_total</stringProp>
+              <stringProp name="collector.type">COUNTER</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">CountTotal</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the total number of successful samplers</stringProp>
+              <stringProp name="collector.metric_name">jsr223_success_total</stringProp>
+              <stringProp name="collector.type">COUNTER</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">SuccessTotal</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the response size for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_rsize_as_hist</stringProp>
+              <stringProp name="collector.type">HISTOGRAM</stringProp>
+              <collectionProp name="collector.labels"/>
+              <stringProp name="collector.quantiles_or_buckets">100,500,1000,3000</stringProp>
+              <stringProp name="listener.collector.measuring">ResponseSize</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">success ratio of the can_fail_sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_can_fail</stringProp>
+              <stringProp name="collector.type">SUCCESS_RATIO</stringProp>
+              <collectionProp name="collector.labels"/>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">SuccessRatio</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the latency (ttfb) for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_latency_as_hist</stringProp>
+              <stringProp name="collector.type">HISTOGRAM</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets">100,500,1000,3000</stringProp>
+              <stringProp name="listener.collector.measuring">Latency</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the idle time for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_idle_time</stringProp>
+              <stringProp name="collector.type">SUMMARY</stringProp>
+              <collectionProp name="collector.labels"/>
+              <stringProp name="collector.quantiles_or_buckets">0.75,0.5|0.95,0.1|0.99,0.01</stringProp>
+              <stringProp name="listener.collector.measuring">IdleTime</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">default help string</stringProp>
+              <stringProp name="collector.metric_name">jsr223_assertions</stringProp>
+              <stringProp name="collector.type">SUCCESS_RATIO</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">SuccessRatio</stringProp>
+              <stringProp name="listener.collector.listen_to">assertions</stringProp>
+            </elementProp>
+          </collectionProp>
+          <stringProp name="TestPlan.comments">This listener &quot;measures&quot; everything, sometimes in summaries, sometimes in histograms.</stringProp>
+        </com.github.johrstrom.listener.PrometheusListener>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

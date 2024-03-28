@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan">
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
+        <intProp name="ThreadGroup.num_threads">1000</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
+        <longProp name="ThreadGroup.duration">900</longProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <intProp name="LoopController.loops">-1</intProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">8080</stringProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request">
+          <stringProp name="HTTPSampler.path">/user/search</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="first_name" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${__V(${__chooseRandom(Яро,Фёд,Фёд,Фёд,Уль,Тим,Тим,Тим,Таи,Таи,Соф,Соф,Соф,Соф,Сер,Сем,Ром,Роб,Пёт,Пол,Пол,Пол,Оль,Оле,Ник,Ник,Ник,Над,Мих,Мих,Мир,Мир,Мил,Мар,Мар,Мар,Мар,Мар,Мак,Мак,Мак,Мак,Мак,Мак,Мак,Ксе,Кир,Кир,Кир,Ива,Ива,Ива,Зоя,Зла,Ели,Ели,Ели,Ели,Ека,Ека,Ека,Евг,Ева,Ева,Ева,Дми,Дар,Дар,Дар,Дан,Дан,Дан,Гри,Гри,Вик,Вер,Вер,Вер,Вас,Вар,Вар,Вар,Вал,Вал,Арт,Арс,Ари,Анн,Анн,Анд,Анд,Анд,Ана,Алё,Али,Але,Але,Але,Але,Ада)})}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">first_name</stringProp>
+              </elementProp>
+              <elementProp name="last_name" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${__V(${__chooseRandom(Яро,Фёд,Фёд,Фёд,Уль,Тим,Тим,Тим,Таи,Таи,Соф,Соф,Соф,Соф,Сер,Сем,Ром,Роб,Пёт,Пол,Пол,Пол,Оль,Оле,Ник,Ник,Ник,Над,Мих,Мих,Мир,Мир,Мил,Мар,Мар,Мар,Мар,Мар,Мак,Мак,Мак,Мак,Мак,Мак,Мак,Ксе,Кир,Кир,Кир,Ива,Ива,Ива,Зоя,Зла,Ели,Ели,Ели,Ели,Ека,Ека,Ека,Евг,Ева,Ева,Ева,Дми,Дар,Дар,Дар,Дан,Дан,Дан,Гри,Гри,Вик,Вер,Вер,Вер,Вас,Вар,Вар,Вар,Вал,Вал,Арт,Арс,Ари,Анн,Анн,Анд,Анд,Анд,Ана,Алё,Али,Але,Але,Але,Але,Ада)})}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">last_name</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <com.github.johrstrom.listener.PrometheusListener guiclass="com.github.johrstrom.listener.gui.PrometheusListenerGui" testclass="com.github.johrstrom.listener.PrometheusListener" testname="Main prometheus listener" enabled="true">
+          <collectionProp name="prometheus.collector_definitions">
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the response time for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_rt_as_hist</stringProp>
+              <stringProp name="collector.type">HISTOGRAM</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets">100,500,1000,3000</stringProp>
+              <stringProp name="listener.collector.listen_to">samples</stringProp>
+              <stringProp name="listener.collector.measuring">ResponseTime</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the response time for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_rt_as_summary</stringProp>
+              <stringProp name="collector.type">SUMMARY</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="50511102">category</stringProp>
+                <stringProp name="102727412">label</stringProp>
+                <stringProp name="3059181">code</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets">0.75,0.5|0.95,0.1|0.99,0.01</stringProp>
+              <stringProp name="listener.collector.measuring">ResponseTime</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the total number of samplers</stringProp>
+              <stringProp name="collector.metric_name">jsr223_count_total</stringProp>
+              <stringProp name="collector.type">COUNTER</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">CountTotal</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the total number of successful samplers</stringProp>
+              <stringProp name="collector.metric_name">jsr223_success_total</stringProp>
+              <stringProp name="collector.type">COUNTER</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">SuccessTotal</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the response size for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_rsize_as_hist</stringProp>
+              <stringProp name="collector.type">HISTOGRAM</stringProp>
+              <collectionProp name="collector.labels"/>
+              <stringProp name="collector.quantiles_or_buckets">100,500,1000,3000</stringProp>
+              <stringProp name="listener.collector.measuring">ResponseSize</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">success ratio of the can_fail_sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_can_fail</stringProp>
+              <stringProp name="collector.type">SUCCESS_RATIO</stringProp>
+              <collectionProp name="collector.labels"/>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">SuccessRatio</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the latency (ttfb) for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_latency_as_hist</stringProp>
+              <stringProp name="collector.type">HISTOGRAM</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets">100,500,1000,3000</stringProp>
+              <stringProp name="listener.collector.measuring">Latency</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">the idle time for a jsr223 sampler</stringProp>
+              <stringProp name="collector.metric_name">jsr223_idle_time</stringProp>
+              <stringProp name="collector.type">SUMMARY</stringProp>
+              <collectionProp name="collector.labels"/>
+              <stringProp name="collector.quantiles_or_buckets">0.75,0.5|0.95,0.1|0.99,0.01</stringProp>
+              <stringProp name="listener.collector.measuring">IdleTime</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="com.github.johrstrom.listener.ListenerCollectorConfig">
+              <stringProp name="collector.help">default help string</stringProp>
+              <stringProp name="collector.metric_name">jsr223_assertions</stringProp>
+              <stringProp name="collector.type">SUCCESS_RATIO</stringProp>
+              <collectionProp name="collector.labels">
+                <stringProp name="102727412">label</stringProp>
+              </collectionProp>
+              <stringProp name="collector.quantiles_or_buckets"></stringProp>
+              <stringProp name="listener.collector.measuring">SuccessRatio</stringProp>
+              <stringProp name="listener.collector.listen_to">assertions</stringProp>
+            </elementProp>
+          </collectionProp>
+          <stringProp name="TestPlan.comments">This listener &quot;measures&quot; everything, sometimes in summaries, sometimes in histograms.</stringProp>
+        </com.github.johrstrom.listener.PrometheusListener>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

@@ -1,0 +1,83 @@
+version: "3.1"
+services:
+  postgres:
+    container_name: postgres-master
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    command: |
+      postgres
+        -c listen_addresses='*'
+        -c wal_level=hot_standby
+        -c hba_file=/etc/postgresql/pg_hba.conf
+        -c shared_buffers=128kB
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d social" ]
+      interval: 1s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 96M
+
+  postgres-replica-0:
+    container_name: postgres-slave-0
+    build:
+      context: postgres-async
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_replica_0:/var/lib/postgresql/data
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d social" ]
+      interval: 1s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 96M
+
+  postgres-replica-1:
+    container_name: postgres-slave-1
+    build:
+      context: postgres-async
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data_replica_1:/var/lib/postgresql/data
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d social" ]
+      interval: 1s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 96M
+
+volumes:
+  postgres_data: { }
+  postgres_data_replica_0: { }
+  postgres_data_replica_1: { }

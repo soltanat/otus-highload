@@ -11,7 +11,9 @@ COPY . .
 
 RUN go build -o bin/upload ./cmd/upload
 
-RUN wget https://raw.githubusercontent.com/OtusTeam/highload/master/homework/people.csv
+COPY people.csv ./people.csv
+
+RUN #wget https://raw.githubusercontent.com/OtusTeam/highload/master/homework/people.csv
 
 FROM alpine
 

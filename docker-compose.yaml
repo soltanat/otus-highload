@@ -1,22 +1,5 @@
 version: "3.1"
 services:
-  postgres:
-    image: postgres:14
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 1s
-      timeout: 10s
-      retries: 5
-
   migrate:
     image: migrate
     build:
@@ -36,11 +19,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-#    deploy:
-#      resources:
-#        limits:
-#          cpus: "0.5"
-#          memory: 128M
     depends_on:
       postgres:
         condition: service_healthy
@@ -55,7 +33,3 @@ services:
         condition: service_healthy
       migrate:
         condition: service_completed_successfully
-
-
-volumes:
-  postgres_data:

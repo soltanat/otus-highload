@@ -10,4 +10,4 @@ chmod 0700 /var/lib/postgresql/data
 
 exec postgres -c hot_standby=on \
               -c primary_conninfo='host=postgres port=5432 user=replication_user password=replication_password' \
-              -c shared_buffers=128kB
+              -c cluster_name=${CLUSTER_NAME}

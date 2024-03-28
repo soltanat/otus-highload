@@ -12,3 +12,14 @@ up-async:
 down-async:
 	docker-compose -f ./postgres-async-docker-compose.yaml -f ./docker-compose.yaml down -v
 	docker-compose -f ./monitoring/monitoring.yaml down -v
+
+
+up-sync:
+	docker-compose -f ./postgres-sync-docker-compose.yaml up -d --build
+
+down-sync:
+	docker-compose -f ./postgres-sync-docker-compose.yaml down -v
+
+
+run-gentransactions:
+	go run ./cmd/gentransactions

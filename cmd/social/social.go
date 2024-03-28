@@ -28,21 +28,27 @@ func main() {
 
 	parseFlags()
 
-	conn, err := db.New(ctx, flagDBAddr)
+	writeConn, err := db.New(ctx, flagWriteDBAddr)
 	if err != nil {
-		l.Fatal().Err(err).Msg("unable to connect to database")
+		l.Fatal().Err(err).Msg("unable to connect to write database")
 	}
 
-	//err = db.ApplyMigrations(flagDBAddr)
+	readConn, err := db.New(ctx, flagReadDBAddr)
+	if err != nil {
+		l.Fatal().Err(err).Msg("unable to connect to read database")
+	}
+
+	//err = db.ApplyMigrations(flagWriteDBAddr)
 	//if err != nil {
 	//	l.Fatal().Err(err).Msg("unable to apply migrations")
 	//}
 
-	userStorage := postgres.NewUserStorage(conn)
+	writeUserStorage := postgres.NewUserStorage(writeConn)
+	readUserStorage := postgres.NewUserStorage(readConn)
 
 	passHasher := usecase.NewPasswordHasher()
 
-	userUseCase, err := usecase.NewUser(userStorage, passHasher)
+	userUseCase, err := usecase.NewUser(writeUserStorage, readUserStorage, passHasher)
 	if err != nil {
 		l.Fatal().Err(err).Msg("unable to create user usecase")
 	}

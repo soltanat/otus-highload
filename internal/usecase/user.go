@@ -23,20 +23,25 @@ type PasswordHasher interface {
 }
 
 type User struct {
-	userStorager UserStorager
-	hasher       PasswordHasher
+	writeUserStorager UserStorager
+	readUserStorager  UserStorager
+	hasher            PasswordHasher
 }
 
-func NewUser(userStorager UserStorager, hasher PasswordHasher) (*User, error) {
-	if userStorager == nil {
-		return nil, fmt.Errorf("userStorager is nil")
+func NewUser(writeUserStorager UserStorager, readUserStorager UserStorager, hasher PasswordHasher) (*User, error) {
+	if writeUserStorager == nil {
+		return nil, fmt.Errorf("writeUserStorager is nil")
+	}
+	if readUserStorager == nil {
+		return nil, fmt.Errorf("readUserStorager is nil")
 	}
 	if hasher == nil {
 		return nil, fmt.Errorf("hasher is nil")
 	}
 	return &User{
-		userStorager: userStorager,
-		hasher:       hasher,
+		writeUserStorager: writeUserStorager,
+		readUserStorager:  readUserStorager,
+		hasher:            hasher,
 	}, nil
 }
 
@@ -66,7 +71,7 @@ func (u *User) Register(
 		return nil, err
 	}
 
-	err = u.userStorager.Save(ctx, nil, user)
+	err = u.writeUserStorager.Save(ctx, nil, user)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +84,7 @@ func (u *User) Authenticate(ctx context.Context, userID uuid.UUID, password stri
 		return nil, entity.ValidationError{Err: fmt.Errorf("password is empty")}
 	}
 
-	user, err := u.userStorager.Get(ctx, nil, userID)
+	user, err := u.writeUserStorager.Get(ctx, nil, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +97,7 @@ func (u *User) Authenticate(ctx context.Context, userID uuid.UUID, password stri
 }
 
 func (u *User) GetUser(ctx context.Context, userID uuid.UUID) (*entity.User, error) {
-	return u.userStorager.Get(ctx, nil, userID)
+	return u.readUserStorager.Get(ctx, nil, userID)
 }
 
 func (u *User) Search(ctx context.Context, filter *entity.UserFilter) ([]*entity.User, error) {
@@ -108,7 +113,7 @@ func (u *User) Search(ctx context.Context, filter *entity.UserFilter) ([]*entity
 		filter.Limit = intPtr(10)
 	}
 
-	return u.userStorager.Find(ctx, nil, filter)
+	return u.readUserStorager.Find(ctx, nil, filter)
 }
 
 func intPtr(i int) *int {

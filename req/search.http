@@ -1,2 +1,9 @@
-GET http://localhost:8080/user/search?first_name=Анд&last_name=Сол
+GET http://localhost:8080/user/search?first_name=Ан&last_name=По
 Content-Type: application/json
+
+###
+
+GET http://localhost:8080/user/get/40aeb475-da6d-49ca-9276-728e6463751f
+Content-Type: application/json
+
+###

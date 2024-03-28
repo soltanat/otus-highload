@@ -1,5 +1,24 @@
 version: "3.1"
 services:
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    environment:
+      - DB_HOST=postgres-replica-0,postgres-replica-1
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - AUTH_TYPE=scram-sha-256
+      - DB_PASSWORD=postgres
+      - AUTH_USER=postgres
+      - AUTH_PASSWORD=postgres
+      - AUTH_METHOD=trust
+    ports:
+      - "5436:5432"
+#    depends_on:
+#      postgres-replica-0:
+#        condition: service_healthy
+#      postgres-replica-1:
+#        condition: service_healthy
+
   postgres:
     container_name: postgres-master
     image: postgres:16-alpine
@@ -44,8 +63,8 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d social" ]
       interval: 1s
-      timeout: 10s
-      retries: 5
+      timeout: 20s
+      retries: 10
     deploy:
       resources:
         limits:
@@ -70,8 +89,8 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d social" ]
       interval: 1s
-      timeout: 10s
-      retries: 5
+      timeout: 20s
+      retries: 10
     deploy:
       resources:
         limits:

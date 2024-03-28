@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep 10
+
 pg_basebackup -h postgres -D /var/lib/postgresql/data -U replication_user -P -v -X stream
 
 touch /var/lib/postgresql/data/standby.signal

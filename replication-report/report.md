@@ -12,6 +12,14 @@ postgres
     -c shared_buffers=128kB
 ```
 
+Настройка слейвов
+```shell
+postgres 
+    -c hot_standby=on
+    -c primary_conninfo='host=postgres port=5432 user=replication_user password=replication_password'
+    -c shared_buffers=128kB
+```
+
 Результат тестирования.
 Ресурсы
 ![Screenshot 2024-03-28 at 20.31.28.png](Screenshot%202024-03-28%20at%2020.31.28.png)

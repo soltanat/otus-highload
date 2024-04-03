@@ -32,7 +32,7 @@ func NewAuthenticator(v JWSValidator) openapi3filter.AuthenticationFunc {
 }
 
 func Authenticate(v JWSValidator, ctx context.Context, input *openapi3filter.AuthenticationInput) error {
-	if input.SecuritySchemeName != "BearerAuth" {
+	if input.SecuritySchemeName != "bearerAuth" {
 		return echo.NewHTTPError(http.StatusUnauthorized, "invalid security scheme")
 	}
 
@@ -69,7 +69,7 @@ func GetJWSFromRequest(req *http.Request) (string, error) {
 	return strings.TrimPrefix(authHdr, prefix), nil
 }
 
-var userIDKeyStruct = struct{}{}
+var UserIDKeyStruct = struct{}{}
 
 func StrictMiddlewareUserIDTransfer(f echoStrictMiddleware.StrictEchoHandlerFunc, operationID string) echoStrictMiddleware.StrictEchoHandlerFunc {
 	return func(ctx echo.Context, request interface{}) (response interface{}, err error) {
@@ -79,7 +79,7 @@ func StrictMiddlewareUserIDTransfer(f echoStrictMiddleware.StrictEchoHandlerFunc
 				return nil, fmt.Errorf("user_id is not a string")
 			}
 			rCtx := ctx.Request().Context()
-			rCtx = context.WithValue(rCtx, userIDKeyStruct, value)
+			rCtx = context.WithValue(rCtx, UserIDKeyStruct, value)
 			ctx.SetRequest(ctx.Request().WithContext(rCtx))
 		}
 

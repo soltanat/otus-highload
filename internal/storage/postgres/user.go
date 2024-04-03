@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 
@@ -74,10 +75,34 @@ func (s *User) Find(ctx context.Context, tx entity.Tx, filter *entity.UserFilter
 		conn = tx.(*PgTx).conn
 	}
 
+	query := `SELECT id, first_name, second_name, birthdate, biography, city, password FROM users`
+	statements := make([]string, 0)
+	statementsValues := make([]any, 0)
+	if filter.FirstName != nil {
+		statements = append(statements, fmt.Sprintf("first_name = $%d", len(statements)+1))
+		statementsValues = append(statementsValues, filter.FirstName.Like)
+	}
+	if filter.SecondName != nil {
+		statements = append(statements, fmt.Sprintf("second_name = $%d", len(statements)+1))
+		statementsValues = append(statementsValues, filter.SecondName.Like)
+	}
+	if len(statements) > 0 {
+		query = fmt.Sprintf("%s WHERE %s", query, strings.Join(statements, " AND "))
+	}
+
+	if filter.Offset != nil {
+		query += fmt.Sprintf(" OFFSET $%d", len(statements)+1)
+		statementsValues = append(statementsValues, filter.Offset)
+	}
+	if filter.Limit != nil {
+		query += fmt.Sprintf(" LIMIT $%d", len(statements)+1)
+		statementsValues = append(statementsValues, filter.Limit)
+	}
+
 	rows, err := conn.Query(
 		ctx,
-		`SELECT id, first_name, second_name, birthdate, biography, city, password FROM users WHERE first_name LIKE $1 || '%' AND second_name LIKE $2 || '%' OFFSET $3 LIMIT $4`,
-		filter.FirstName.Like, filter.SecondName.Like, filter.Offset, filter.Limit,
+		query,
+		statementsValues...,
 	)
 	if err != nil {
 		return nil, entity.StorageError{Err: err}

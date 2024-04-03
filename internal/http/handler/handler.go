@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"github.com/soltanat/otus-highload/internal/http/middleware"
 	"time"
 
 	"github.com/google/uuid"
@@ -12,6 +13,8 @@ import (
 	"github.com/soltanat/otus-highload/internal/entity"
 	"github.com/soltanat/otus-highload/internal/http/api"
 )
+
+var userIDKey = "subject"
 
 type TokenProvider interface {
 	GenerateToken(userID string) (string, error)
@@ -24,18 +27,41 @@ type User interface {
 	Search(ctx context.Context, filter *entity.UserFilter) ([]*entity.User, error)
 }
 
+type Feed interface {
+	Get(ctx context.Context, userID uuid.UUID, offset, limit int) ([]entity.Post, error)
+}
+
+type Friend interface {
+	Add(ctx context.Context, userID, friendID uuid.UUID) error
+	Delete(ctx context.Context, userID, friendID uuid.UUID) error
+}
+
+type Post interface {
+	Create(ctx context.Context, post *entity.Post) (uuid.UUID, error)
+	Update(ctx context.Context, userID, id uuid.UUID, update *entity.Post) error
+	Delete(ctx context.Context, userID, id uuid.UUID) error
+	Get(ctx context.Context, id uuid.UUID) (*entity.Post, error)
+}
+
 type Handler struct {
 	userUseCase   User
 	tokenProvider TokenProvider
+	feedUseCase   Feed
+	friendUseCase Friend
+	postUseCase   Post
 }
 
-func New(userUseCase User, tokenProvider TokenProvider) *Handler {
-	if userUseCase == nil || tokenProvider == nil {
+func New(userUseCase User, tokenProvider TokenProvider, feedUseCase Feed, friendUseCase Friend, postUseCase Post) *Handler {
+	if userUseCase == nil || tokenProvider == nil || feedUseCase == nil || friendUseCase == nil || postUseCase == nil {
 		return nil
 	}
+
 	return &Handler{
 		userUseCase:   userUseCase,
 		tokenProvider: tokenProvider,
+		feedUseCase:   feedUseCase,
+		friendUseCase: friendUseCase,
+		postUseCase:   postUseCase,
 	}
 }
 
@@ -159,8 +185,8 @@ func (h *Handler) SearchUser(ctx context.Context, request api.SearchUserRequestO
 	}
 
 	filter := &entity.UserFilter{
-		FirstName:  entity.Filter{Like: request.Params.FirstName},
-		SecondName: entity.Filter{Like: request.Params.LastName},
+		FirstName:  &entity.Filter{Like: request.Params.FirstName},
+		SecondName: &entity.Filter{Like: request.Params.LastName},
 	}
 
 	users, err := h.userUseCase.Search(ctx, filter)
@@ -198,38 +224,198 @@ func (h *Handler) SendDialogMessage(ctx context.Context, request api.SendDialogM
 }
 
 func (h *Handler) DeleteFriend(ctx context.Context, request api.DeleteFriendRequestObject) (api.DeleteFriendResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
+	ctxUserID := ctx.Value(middleware.UserIDKeyStruct)
+
+	if ctxUserID == nil {
+		return api.GetFeed401Response{}, nil
+	}
+
+	userID, err := uuid.Parse(ctxUserID.(string))
+	if err != nil {
+		return api.GetFeed400Response{}, nil
+	}
+
+	err = h.friendUseCase.Delete(ctx, userID, uuid.MustParse(request.UserId))
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.DeleteFriend400Response{}, nil
+		}
+		log.Errorf("failed to delete friend: %v", err)
+		return api.DeleteFriend500JSONResponse{}, nil
+	}
+
+	return api.DeleteFriend200Response{}, nil
 }
 
 func (h *Handler) SetFriend(ctx context.Context, request api.SetFriendRequestObject) (api.SetFriendResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
+	ctxUserID := ctx.Value(middleware.UserIDKeyStruct)
+
+	if ctxUserID == nil {
+		return api.GetFeed401Response{}, nil
+	}
+
+	userID, err := uuid.Parse(ctxUserID.(string))
+	if err != nil {
+		return api.GetFeed400Response{}, nil
+	}
+
+	err = h.friendUseCase.Add(ctx, userID, uuid.MustParse(request.UserId))
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.SetFriend400Response{}, nil
+		}
+		log.Errorf("failed to set friend: %v", err)
+		return api.SetFriend500JSONResponse{}, nil
+	}
+
+	return api.SetFriend200Response{}, nil
 }
 
 func (h *Handler) CreatePost(ctx context.Context, request api.CreatePostRequestObject) (api.CreatePostResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
+	ctxUserID := ctx.Value(middleware.UserIDKeyStruct)
+
+	if ctxUserID == nil {
+		return api.GetFeed401Response{}, nil
+	}
+
+	userID, err := uuid.Parse(ctxUserID.(string))
+	if err != nil {
+		return api.GetFeed400Response{}, nil
+	}
+
+	postID, err := h.postUseCase.Create(ctx, &entity.Post{
+		Text:     request.Body.Text,
+		AuthorID: userID,
+	})
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.CreatePost400Response{}, nil
+		}
+		log.Errorf("failed to create post: %v", err)
+		return api.CreatePost500JSONResponse{}, nil
+	}
+
+	return api.CreatePost200JSONResponse(postID.String()), nil
 }
 
 func (h *Handler) DeletePost(ctx context.Context, request api.DeletePostRequestObject) (api.DeletePostResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
+	ctxUserID := ctx.Value(middleware.UserIDKeyStruct)
+
+	if ctxUserID == nil {
+		return api.GetFeed401Response{}, nil
+	}
+
+	userID, err := uuid.Parse(ctxUserID.(string))
+	if err != nil {
+		return api.GetFeed400Response{}, nil
+	}
+
+	err = h.postUseCase.Delete(ctx, userID, uuid.MustParse(request.Id))
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.DeletePost400Response{}, nil
+		}
+		log.Errorf("failed to delete post: %v", err)
+		return api.DeletePost500JSONResponse{}, nil
+	}
+
+	return api.DeletePost200Response{}, nil
 }
 
 func (h *Handler) GetFeed(ctx context.Context, request api.GetFeedRequestObject) (api.GetFeedResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
+	ctxUserID := ctx.Value(middleware.UserIDKeyStruct)
+
+	if ctxUserID == nil {
+		return api.GetFeed401Response{}, nil
+	}
+
+	userID, err := uuid.Parse(ctxUserID.(string))
+	if err != nil {
+		return api.GetFeed400Response{}, nil
+	}
+
+	var offset, limit int
+	if request.Params.Offset == nil {
+		offset = 0
+	} else {
+		offset = int(*request.Params.Offset)
+	}
+
+	if request.Params.Limit == nil {
+		limit = 20
+	} else {
+		limit = int(*request.Params.Limit)
+	}
+
+	feed, err := h.feedUseCase.Get(ctx, userID, offset, limit)
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.GetFeed400Response{}, nil
+		}
+		log.Errorf("failed to get feed: %v", err)
+		return api.GetFeed500JSONResponse{}, nil
+	}
+
+	response := make([]api.Post, len(feed))
+	for i, post := range feed {
+		response[i] = api.Post{
+			Id:           stringPtr(post.ID.String()),
+			Text:         &post.Text,
+			AuthorUserId: stringPtr(post.AuthorID.String()),
+		}
+	}
+
+	return api.GetFeed200JSONResponse(response), nil
 }
 
 func (h *Handler) GetPost(ctx context.Context, request api.GetPostRequestObject) (api.GetPostResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
+	post, err := h.postUseCase.Get(ctx, uuid.MustParse(request.Id))
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.GetPost400Response{}, nil
+		}
+		log.Errorf("failed to get post: %v", err)
+		return api.GetPost500JSONResponse{}, nil
+	}
+
+	return api.GetPost200JSONResponse(api.Post{
+		Id:           stringPtr(post.ID.String()),
+		Text:         &post.Text,
+		AuthorUserId: stringPtr(post.AuthorID.String()),
+	}), nil
 }
 
 func (h *Handler) UpdatePost(ctx context.Context, request api.UpdatePostRequestObject) (api.UpdatePostResponseObject, error) {
-	//TODO implement me
-	panic("implement me")
+	ctxUserID := ctx.Value(middleware.UserIDKeyStruct)
+
+	if ctxUserID == nil {
+		return api.GetFeed401Response{}, nil
+	}
+
+	userID, err := uuid.Parse(ctxUserID.(string))
+	if err != nil {
+		return api.GetFeed400Response{}, nil
+	}
+
+	err = h.postUseCase.Update(ctx, userID, uuid.MustParse(request.Body.Id), &entity.Post{
+		Text: request.Body.Text,
+	})
+	if err != nil {
+		validationErr := entity.ValidationError{}
+		if errors.As(err, &validationErr) {
+			return api.UpdatePost400Response{}, nil
+		}
+		log.Errorf("failed to update post: %v", err)
+		return api.UpdatePost500JSONResponse{}, nil
+	}
+
+	return api.UpdatePost200Response{}, nil
 }
 
 func stringPtr(v string) *string {

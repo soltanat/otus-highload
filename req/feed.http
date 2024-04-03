@@ -1,0 +1,80 @@
+### Регистрируем пользователя
+POST http://localhost:8080/user/register
+Content-Type: application/json
+
+{
+  "first_name": "User1",
+  "password": "test"
+}
+
+> {% client.global.set("user1", response.body.user_id); %}
+
+
+### Регистрируем друга
+POST http://localhost:8080/user/register
+Content-Type: application/json
+
+{
+  "first_name": "User2",
+  "password": "test"
+}
+
+> {% client.global.set("user2", response.body.user_id); %}
+
+
+### Логиним пользователя
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "id": "{{user1}}",
+  "password": "test"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+
+
+### Добавляем друга
+PUT http://localhost:8080/friend/set/{{user2}}
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+
+### Логинимся под другом
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "id": "{{user2}}",
+  "password": "test"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+
+### Создаем пост
+POST http://localhost:8080/post/create
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "text": "Новый пост"
+}
+
+
+### Логиним пользователя
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "id": "{{user1}}",
+  "password": "test"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+
+### Получаем фид
+GET http://localhost:8080/post/feed
+Authorization: Bearer {{auth_token}}

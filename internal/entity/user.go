@@ -15,6 +15,7 @@ type User struct {
 	Biography  *string
 	City       *string
 	Password   []byte
+	Star       bool
 }
 
 func (u *User) Validate() error {
@@ -38,8 +39,15 @@ type Filter struct {
 }
 
 type UserFilter struct {
-	FirstName  Filter
-	SecondName Filter
+	FirstName  *Filter
+	SecondName *Filter
 	Limit      *int
 	Offset     *int
+}
+
+type FriendFilter struct {
+	UserID   *uuid.UUID
+	FriendID *uuid.UUID
+	Star     *bool
+	Limit    *int
 }

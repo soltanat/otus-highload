@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"github.com/soltanat/otus-highload/internal/usecase/feed"
 	"net/http"
 	"os"
 	"os/signal"
@@ -46,6 +47,9 @@ func main() {
 	writeUserStorage := postgres.NewUserStorage(writeConn)
 	readUserStorage := postgres.NewUserStorage(readConn)
 
+	readPostStorage := postgres.NewPostStorage(readConn)
+	readFriendStorage := postgres.NewFriendStorage(readConn)
+
 	passHasher := usecase.NewPasswordHasher()
 
 	userUseCase, err := usecase.NewUser(writeUserStorage, readUserStorage, passHasher)
@@ -54,9 +58,21 @@ func main() {
 	}
 	tokenProvider := middleware.NewJWTProvider(flagSignatureKey)
 
+	feedUseCase := feed.NewFeed(readUserStorage, readPostStorage, readFriendStorage)
+
+	go feedUseCase.Init(ctx)
+	go feedUseCase.RunPostProcessor(ctx)
+	go feedUseCase.RunFriendProcessor(ctx)
+
+	postUseCase := usecase.NewPost(readPostStorage, feedUseCase)
+	friendUseCase := usecase.NewFriend(readFriendStorage, feedUseCase)
+
 	h := handler.New(
 		userUseCase,
 		tokenProvider,
+		feedUseCase,
+		friendUseCase,
+		postUseCase,
 	)
 	strictHandler := api.NewStrictHandler(h, []api.StrictMiddlewareFunc{middleware.StrictMiddlewareUserIDTransfer})
 
@@ -89,6 +105,7 @@ func main() {
 	}()
 
 	gracefulShutdown()
+	ctx.Done()
 
 	err = e.Close()
 	if err != nil {

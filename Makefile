@@ -23,3 +23,22 @@ down-sync:
 
 run-gentransactions:
 	go run ./cmd/gentransactions
+
+up-postgres:
+	docker-compose -f ./postgres-docker-compose.yaml up -d postgres
+
+up-app:
+	docker-compose -f ./postgres-docker-compose.yaml up -d app
+
+down:
+	docker-compose -f ./postgres-docker-compose.yaml down -v
+
+
+migrate-up:
+	 goose -dir ./migrations postgres "host=localhost user=postgres password=postgres dbname=social sslmode=disable" up
+
+migrate-down:
+	 goose -dir ./migrations postgres "host=localhost user=postgres password=postgres dbname=social sslmode=disable" down
+
+upload:
+	go run ./cmd/upload -d postgres://postgres:postgres@localhost:5432/social?sslmode=disable
